@@ -1,3 +1,11 @@
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.csproj.AssemblyReference.cache
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/rpswa.dswa.cache.json
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.AssemblyInfoInputs.cache
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.AssemblyInfo.cs
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.csproj.CoreCompileInputs.cache
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.MvcApplicationPartsAssemblyInfo.cs
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.MvcApplicationPartsAssemblyInfo.cache
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/BuildHost-net472/Microsoft.Build.Locator.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config
@@ -58,7 +66,6 @@
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.Google.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.AspNetCore.OpenApi.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.Bcl.AsyncInterfaces.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.Build.dll
@@ -92,6 +99,9 @@
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Mono.TextTemplating.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Newtonsoft.Json.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Scalar.AspNetCore.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/System.ClientModel.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/System.CodeDom.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/System.Composition.AttributedModel.dll
@@ -192,14 +202,6 @@
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/runtimes/win/lib/net9.0/System.Windows.Extensions.dll
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.csproj.AssemblyReference.cache
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/rpswa.dswa.cache.json
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.GeneratedMSBuildEditorConfig.editorconfig
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.AssemblyInfoInputs.cache
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.AssemblyInfo.cs
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.csproj.CoreCompileInputs.cache
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.MvcApplicationPartsAssemblyInfo.cs
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.MvcApplicationPartsAssemblyInfo.cache
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/rjimswa.dswa.cache.json
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/rjsmrazor.dswa.cache.json
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json

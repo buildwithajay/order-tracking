@@ -28,23 +28,56 @@ namespace Server.Api.Controllers
                 order.Id,
                 order.OrderNumber,
                 order.Total_Amount,
-                order.OrderStatus
+                order.OrderStatus,
+              
             });
         }
         [HttpPut]
-        [Route("{id:int}/confirm")]
+        [Route("{ordernumber}/confirm")]
         [Authorize(Roles ="Manager")]
-        public async Task<IActionResult> ConfirmOrder([FromRoute] int id)
+        public async Task<IActionResult> ConfirmOrder([FromRoute] string ordernumber)
         {
-            var order = await _orderRepo.ConfirmOrderAsync(id);
+            var order = await _orderRepo.ConfirmOrderAsync(ordernumber);
             if(order is null) return NotFound("Your order not found");
             return Ok(new
             {
                 order.Id,
                 order.OrderNumber,
                 order.Total_Amount,
-                order.OrderStatus
+                order.OrderStatus,
+                  items= order.OrderItems!.Select(i=>new
+                {
+                    i.Product!.Name,
+                    i.Quantity,
+                    i.Unit_Price
+
+                })
             });
+        }
+        [HttpGet("my-orders")]
+        [Authorize]
+        public async Task<IActionResult> GetOrderByCustomer()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null)    return Unauthorized();
+            var order = await _orderRepo.GetMyOrdersAsync(userId!);
+            if(order == null)
+            {
+                return NotFound();
+            }
+            return Ok(order.Select(o => new
+            {
+                o.OrderNumber,
+                o.OrderStatus,
+                items = o.OrderItems!.Select(s=>new
+                {
+                  ProductName = s.Product?.Name,
+                  s.Quantity,
+                  s.Unit_Price  
+                }).ToList(),
+                o.Total_Amount,
+                o.Created_At
+            }));
         }
     }
 }

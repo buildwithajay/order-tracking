@@ -73,7 +73,11 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         .WithMany(o=>o.OrderItems)
         .HasForeignKey(k=>k.Order_Id);
 
-    
+        builder.Entity<OrderItem>()
+        .HasOne(p=>p.Product)
+        .WithMany()
+        .HasForeignKey(k=>k.Product_Id);
+        
     } 
 }
 

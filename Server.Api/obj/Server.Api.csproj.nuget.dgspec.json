@@ -56,10 +56,6 @@
               "target": "Package",
               "version": "[10.0.1, )"
             },
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[10.0.1, )"
-            },
             "Microsoft.EntityFrameworkCore.Design": {
               "target": "Package",
               "version": "[10.0.1, )"
@@ -75,6 +71,10 @@
             "Scalar.AspNetCore": {
               "target": "Package",
               "version": "[2.11.9, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.8.1, )"
             }
           },
           "imports": [

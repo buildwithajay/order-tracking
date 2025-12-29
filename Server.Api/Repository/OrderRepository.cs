@@ -16,9 +16,9 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public async Task<Order?> ConfirmOrderAsync(int orderId)
+    public async Task<Order?> ConfirmOrderAsync(string ordernumber)
     {
-        var order = await _context.Orders.Include(o=>o.OrderItems).FirstOrDefaultAsync(s=>s.Id==orderId);
+        var order = await _context.Orders.Include(o=>o.OrderItems).FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
         if (order == null)
         {
             throw new Exception("Order not found");
@@ -64,8 +64,15 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public Task<List<Order>> GetOrderAsync()
+    public async Task<List<Order>> GetMyOrdersAsync(string CustomerId)
     {
-        throw new Exception();
+        var orders= await _context.Orders
+                .Include(x=>x.OrderItems)!
+                .ThenInclude(p=>p.Product)
+                .Where(s=>s.CustomerId==CustomerId)
+                .OrderByDescending(x=>x.Created_At)
+                .ToListAsync();
+
+        return orders;
     }
 }
