@@ -13,5 +13,7 @@ public class Order
    public OrderStatus?  OrderStatus { get; set; }
    public decimal Total_Amount { get; set; }
    public DateTime Created_At { get; set; }
+   public string? deliveryPersonId { get; set; }
+   public AppUser? DeliveryPerson { get; set; }
    public List<OrderItem>? OrderItems { get;  set; } 
 }

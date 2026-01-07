@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Scalar.AspNetCore;
 using Server.Api.ApplicationData;
 using Server.Api.ExceptionHandler;
 using Server.Api.Interfaces;
@@ -59,7 +58,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "My API",
-        Description = "ASP.NET Core Web API with JWT Authentication"
+        Description = "Order Tracking System API"
     });
 
     // Add JWT Bearer Authentication
@@ -97,7 +96,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
   
-     app.UseSwagger();
+    app.UseSwagger();
     app.UseSwaggerUI();
 
 }

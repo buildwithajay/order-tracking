@@ -11,4 +11,9 @@ public interface IOrderRepository
 
       Task<Order?> ConfirmOrderAsync(string ordernumber);
       Task<List<Order>> GetMyOrdersAsync(string CustomerId);
+      Task<List<Order>> GetAllPendingOrderAsync();
+      Task<List<Order>> AvailableOrderForDelivery();
+      Task<Order> AcceptOrderByDeliveryPerson(string ordernumber, string deliveryPersonId);
+      Task<Order> MarkAsDeliveredAsync(string ordernumber, string deliveryPersonId);
+      Task<List<OrderStatusHistory>> GetOrderStatusHistoriesAsync(string ordernumber);
 }

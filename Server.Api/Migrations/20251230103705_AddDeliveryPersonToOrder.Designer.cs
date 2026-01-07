@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Api.ApplicationData;
 
@@ -11,9 +12,11 @@ using Server.Api.ApplicationData;
 namespace Server.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251230103705_AddDeliveryPersonToOrder")]
+    partial class AddDeliveryPersonToOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -266,23 +269,24 @@ namespace Server.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Order_Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Order_Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Order_Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Update_By")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Updated_At")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Order_Id");
-
-                    b.HasIndex("Update_By");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("OrderStatusHistory");
                 });
@@ -472,19 +476,11 @@ namespace Server.Api.Migrations
 
             modelBuilder.Entity("Server.Api.Entities.Order.OrderStatusHistory", b =>
                 {
-                    b.HasOne("Server.Api.Entities.Order.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("Order_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Server.Api.Models.ApplicationUser.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("Update_By");
+                        .HasForeignKey("AppUserId");
 
                     b.Navigation("AppUser");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Server.Api.Entities.Order.Order", b =>

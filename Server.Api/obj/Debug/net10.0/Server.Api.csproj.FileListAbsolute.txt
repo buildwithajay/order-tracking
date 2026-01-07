@@ -98,7 +98,6 @@
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Microsoft.SqlServer.Server.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Mono.TextTemplating.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Newtonsoft.Json.dll
-/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Scalar.AspNetCore.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll

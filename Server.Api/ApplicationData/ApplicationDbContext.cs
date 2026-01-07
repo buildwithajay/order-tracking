@@ -68,6 +68,12 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         .WithMany()
         .HasForeignKey(u=>u.CustomerId);
 
+        builder.Entity<Order>()
+        .HasOne(d=>d.DeliveryPerson)
+        .WithMany()
+        .HasForeignKey(p=>p.deliveryPersonId)
+        .OnDelete(DeleteBehavior.Restrict);
+
         builder.Entity<OrderItem>()
         .HasOne(o=>o.Order)
         .WithMany(o=>o.OrderItems)
@@ -78,6 +84,15 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         .WithMany()
         .HasForeignKey(k=>k.Product_Id);
         
+        builder.Entity<OrderStatusHistory>()
+        .HasOne(o=>o.Order)
+        .WithMany()
+        .HasForeignKey(f=>f.Order_Id);
+
+        builder.Entity<OrderStatusHistory>()
+        .HasOne(a=>a.AppUser)
+        .WithMany()
+        .HasForeignKey(f=>f.Update_By);
     } 
 }
 

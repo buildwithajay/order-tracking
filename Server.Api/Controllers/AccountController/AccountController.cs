@@ -50,7 +50,8 @@ namespace Server.Api.Controllers.AccountController
             {
                return BadRequest(new {message=result.Errors});
             }
-            var roleAssign = await _userManager.AddToRoleAsync(user, "User");
+            var role = String.IsNullOrWhiteSpace(registerDto.Role)?"User":registerDto.Role;
+            var roleAssign= await _userManager.AddToRoleAsync(user, role);
             if (!roleAssign.Succeeded)
             {
                 throw new Exception($"{roleAssign.Errors}");

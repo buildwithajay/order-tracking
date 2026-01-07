@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.DTOS;
 using Server.Api.DTOS.Orders;
+using Server.Api.Entities.Order;
 using Server.Api.Interfaces;
 
 namespace Server.Api.Controllers
@@ -45,9 +46,9 @@ namespace Server.Api.Controllers
                 order.OrderNumber,
                 order.Total_Amount,
                 order.OrderStatus,
-                  items= order.OrderItems!.Select(i=>new
+                  items= order.OrderItems?.Select(i=>new
                 {
-                    i.Product!.Name,
+                    i.Product?.Name,
                     i.Quantity,
                     i.Unit_Price
 
@@ -79,5 +80,79 @@ namespace Server.Api.Controllers
                 o.Created_At
             }));
         }
+        [HttpGet("pending-orders")]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetPendingOrders()
+        {
+            var orders = await _orderRepo.GetAllPendingOrderAsync();
+            if(orders == null)
+            {
+                return NotFound("no any pending orders");
+            }
+            return Ok(orders.Select(o=>new
+            {
+                o.OrderNumber,
+                o.OrderStatus,
+               
+            }));
+        }
+        [HttpGet("available-for-delivery")]
+        [Authorize(Roles = "DeliveryPerson")]
+        public async Task<IActionResult> AvailableDeliviries()
+        {
+            var orders = await _orderRepo.AvailableOrderForDelivery();
+            if(orders is null)
+            {
+                return NotFound("order not found");
+            }
+            return Ok(orders.Select(s=>new
+            {
+                s.OrderNumber,
+                s.OrderStatus
+            }));
+        }
+        [HttpPut("{ordernumber}/accept")]
+        [Authorize(Roles = "DeliveryPerson")]
+        public async Task<IActionResult> AcceptOrderByDeliveryPerson(string ordernumber)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            if(userId is null)
+            {
+                return Unauthorized();
+            }
+            var order = await _orderRepo.AcceptOrderByDeliveryPerson(ordernumber, userId);
+            if(order is null)
+            {
+                return NotFound("order not found");
+            }
+            return Ok(new
+            {
+                order.deliveryPersonId,
+                order.OrderNumber,
+                order.OrderStatus
+            });
+        }
+        [HttpPut("{ordernumber}/delivered")]
+        [Authorize(Roles = "DeliveryPerson")]
+        public async Task<IActionResult> MarkDelivered(string ordernumber)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            if(userId is null)
+            {
+                return Unauthorized();
+            }
+            var order = await _orderRepo.MarkAsDeliveredAsync(ordernumber, userId);
+            if(order is null)
+            {
+                return NotFound("order not found");
+            }
+            return Ok(new
+            {
+                order.deliveryPersonId,
+                order.OrderNumber,
+                order.OrderStatus
+            });
+        }
+
     }
 }
