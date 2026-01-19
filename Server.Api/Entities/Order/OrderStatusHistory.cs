@@ -7,6 +7,7 @@ namespace Server.Api.Entities.Order;
 public class OrderStatusHistory
 {
     public int  Id { get; set; }
+    public string? OrderNumber { get; set; } = string.Empty;
     public int Order_Id { get; set; }
     public Order? Order { get; set; }
     public OrderStatus? Order_Status { get; set; }

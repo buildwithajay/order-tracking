@@ -11,6 +11,7 @@ public static class ProductMapper
     {
         return new ShowProduct
         {
+            Id= productDto.Id,
             Name= productDto.Name,
             Price= productDto.Price
         };

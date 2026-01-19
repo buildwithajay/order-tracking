@@ -9,7 +9,7 @@ public interface IOrderRepository
    
       Task<Order> CreateAsync(string CustomerId,CreateOrderRequest orderRequest);
 
-      Task<Order?> ConfirmOrderAsync(string ordernumber);
+      Task<Order?> ConfirmOrderAsync(string ordernumber, string userId);
       Task<List<Order>> GetMyOrdersAsync(string CustomerId);
       Task<List<Order>> GetAllPendingOrderAsync();
       Task<List<Order>> AvailableOrderForDelivery();

@@ -216,3 +216,4 @@
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.pdb
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.genruntimeconfig.cache
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/ref/Server.Api.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.sourcelink.json

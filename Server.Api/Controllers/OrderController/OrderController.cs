@@ -2,9 +2,11 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Server.Api.DTOS;
 using Server.Api.DTOS.Orders;
 using Server.Api.Entities.Order;
+using Server.Api.Hubs;
 using Server.Api.Interfaces;
 
 namespace Server.Api.Controllers
@@ -14,9 +16,11 @@ namespace Server.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepo;
-        public OrderController(IOrderRepository orderRepo)
+        private readonly IHubContext<OrderHub> _hubContext;
+        public OrderController(IOrderRepository orderRepo, IHubContext<OrderHub> hubContext)
         {
             _orderRepo=orderRepo;
+            _hubContext = hubContext;
         }
         [HttpPost]
         [Authorize(Roles ="User")]
@@ -24,6 +28,8 @@ namespace Server.Api.Controllers
         {
             var userId= User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var order = await _orderRepo.CreateAsync(userId, orderRequest);
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
+
             return Ok(new
             {
                 order.Id,
@@ -38,8 +44,11 @@ namespace Server.Api.Controllers
         [Authorize(Roles ="Manager")]
         public async Task<IActionResult> ConfirmOrder([FromRoute] string ordernumber)
         {
-            var order = await _orderRepo.ConfirmOrderAsync(ordernumber);
+            var userid = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var order = await _orderRepo.ConfirmOrderAsync(ordernumber, userid);
             if(order is null) return NotFound("Your order not found");
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
+
             return Ok(new
             {
                 order.Id,
@@ -98,7 +107,7 @@ namespace Server.Api.Controllers
         }
         [HttpGet("available-for-delivery")]
         [Authorize(Roles = "DeliveryPerson")]
-        public async Task<IActionResult> AvailableDeliviries()
+        public async Task<IActionResult> AvailableDeliveries()
         {
             var orders = await _orderRepo.AvailableOrderForDelivery();
             if(orders is null)
@@ -125,6 +134,7 @@ namespace Server.Api.Controllers
             {
                 return NotFound("order not found");
             }
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
             return Ok(new
             {
                 order.deliveryPersonId,
@@ -146,6 +156,8 @@ namespace Server.Api.Controllers
             {
                 return NotFound("order not found");
             }
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
+
             return Ok(new
             {
                 order.deliveryPersonId,
@@ -153,6 +165,26 @@ namespace Server.Api.Controllers
                 order.OrderStatus
             });
         }
+
+        [HttpGet("{ordernumber}/order-status")]
+        [Authorize]
+        public async Task<IActionResult> GetOrderStatus(string ordernumber)
+        {
+            
+            var status = await _orderRepo.GetOrderStatusHistoriesAsync(ordernumber);
+            if(status == null)
+            {
+                return NotFound();
+            }
+            return Ok(status.Select(a=> new
+            {
+                a.OrderNumber,
+                a.Order_Status,
+                a.Update_By,
+                a.Updated_At
+            }));
+        }
+        
 
     }
 }

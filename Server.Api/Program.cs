@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Server.Api.ApplicationData;
 using Server.Api.ExceptionHandler;
+using Server.Api.Hubs;
 using Server.Api.Interfaces;
 using Server.Api.Models.ApplicationUser;
 using Server.Api.Repository;
@@ -50,8 +51,16 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
-
-
+builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    })
+);
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -102,9 +111,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandler();
+app.MapHub<OrderHub>("/orderHub");
 app.MapControllers();
 app.Run();
 

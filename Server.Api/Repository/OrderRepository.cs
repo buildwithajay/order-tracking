@@ -42,31 +42,11 @@ public class OrderRepository : IOrderRepository
         order.OrderStatus = OrderStatus.OutForDelivery;
         order.deliveryPersonId= deliveryPersonId;
         await _context.SaveChangesAsync();
-        return order;
-    }
-
-    public async Task<Order> AssignDeliveryAsync(string ordernumber, string deliveryPersonId)
-    {
-        var order = await _context.Orders.FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
-        if(order is null)
-        {
-            throw new Exception("order not found");
-        }
-        if(order.OrderStatus != OrderStatus.Confirmed)
-        {
-            throw new Exception("Order must be confirmed before assigning delivery");
-        }
-        var deliveryUser = await _userManager.FindByIdAsync(deliveryPersonId);
-        if(deliveryUser is null)
-        {
-            throw new KeyNotFoundException("Delivery person not found");
-        }
-        order.deliveryPersonId = deliveryPersonId;
-        order.OrderStatus = OrderStatus.OutForDelivery;
-        await _context.SaveChangesAsync();
         await AddStatusHistoryAysnc(order.Id, OrderStatus.OutForDelivery, deliveryPersonId);
         return order;
     }
+
+
 
     public async Task<List<Order>> AvailableOrderForDelivery()
     {
@@ -80,7 +60,7 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public async Task<Order?> ConfirmOrderAsync(string ordernumber)
+    public async Task<Order?> ConfirmOrderAsync(string ordernumber, string userId)
     {
         var order = await _context.Orders.Include(o=>o.OrderItems).FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
         if (order == null)
@@ -89,6 +69,7 @@ public class OrderRepository : IOrderRepository
         }
         order.OrderStatus = OrderStatus.Confirmed;
         await _context.SaveChangesAsync();
+        await AddStatusHistoryAysnc(order.Id, OrderStatus.Confirmed, userId);
         return order;
     }
 
@@ -101,7 +82,7 @@ public class OrderRepository : IOrderRepository
             OrderItems = new List<OrderItem>()
 
         };
-        decimal Total_Amount= 0;
+        decimal totalAmount= 0;
         foreach(var item in orderRequest.Items!)
         {
             var product = await _context.Products.FindAsync(item.ProductId);
@@ -115,11 +96,11 @@ public class OrderRepository : IOrderRepository
                 Quantity= item.Quantity,
                 Unit_Price= product.Price
             };
-            Total_Amount += product.Price * item.Quantity;
+            totalAmount += product.Price * item.Quantity;
             order.OrderItems!.Add(orderItem);
             order.Created_At= DateTime.Now;
-        }
-         order.Total_Amount= Total_Amount;
+        } 
+        order.Total_Amount= totalAmount;
          _context.Orders.Add(order);
         await _context.SaveChangesAsync();
 
@@ -154,9 +135,18 @@ public class OrderRepository : IOrderRepository
         return orders;
     }
 
-    public Task<List<OrderStatusHistory>> GetOrderStatusHistoriesAsync(string ordernumber)
+    public async Task<List<OrderStatusHistory>> GetOrderStatusHistoriesAsync(string ordernumber)
     {
-        throw new NotImplementedException();
+        var order = await _context.Orders.FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
+        
+        if (order  is null)
+        {
+            throw new KeyNotFoundException("order not found");
+        }
+
+        var status = await _context.OrderStatusHistory.Where(s=>s.OrderNumber == order.OrderNumber).ToListAsync();
+
+        return status;
     }
 
     public async Task<Order> MarkAsDeliveredAsync(string ordernumber, string deliveryPersonId)
@@ -190,6 +180,7 @@ public class OrderRepository : IOrderRepository
         var history = new OrderStatusHistory
         {
             Order= order,
+            OrderNumber =  order.OrderNumber,
             Order_Status= orderStatus,
             Update_By= userId,
             Updated_At= DateTime.UtcNow
