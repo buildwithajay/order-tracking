@@ -17,11 +17,27 @@ namespace Server.Api.Controllers
     {
         private readonly IOrderRepository _orderRepo;
         private readonly IHubContext<OrderHub> _hubContext;
-        public OrderController(IOrderRepository orderRepo, IHubContext<OrderHub> hubContext)
+        private readonly ISmsService _smsService;
+        public OrderController(IOrderRepository orderRepo, IHubContext<OrderHub> hubContext, ISmsService smsService)
         {
             _orderRepo=orderRepo;
             _hubContext = hubContext;
+            _smsService=smsService;
         }
+
+        [HttpGet("getAllOrders")]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _orderRepo.GetAllAsync();
+            return Ok(orders.Select(s => new
+            {
+                s.OrderNumber,
+                s.OrderStatus
+            }));    
+        }
+        
+        
         [HttpPost]
         [Authorize(Roles ="User")]
         public async Task<IActionResult> CreateOrder(CreateOrderRequest orderRequest)
@@ -29,13 +45,25 @@ namespace Server.Api.Controllers
             var userId= User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var order = await _orderRepo.CreateAsync(userId, orderRequest);
             await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
-
+            await _hubContext.Clients.Group("Managers").SendAsync("NewPendingOrder", new
+            {
+                order.OrderNumber,
+                order.OrderStatus
+            });
+            var phone = order.AppUser?.PhoneNumber;
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                return NotFound("number not available");
+            }
+            await _smsService.SendSmsAsync(phone,
+                $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
             return Ok(new
             {
                 order.Id,
                 order.OrderNumber,
                 order.Total_Amount,
                 order.OrderStatus,
+                order.AppUser?.PhoneNumber
               
             });
         }
@@ -142,6 +170,29 @@ namespace Server.Api.Controllers
                 order.OrderStatus
             });
         }
+
+        [HttpGet("outfordeliveryorders")]
+        [Authorize(Roles = "DeliveryPerson")]
+        public async Task<IActionResult> GetOutForDeliveryOrders()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            if (userId is null)
+            {
+                return Unauthorized("not authorized to look into");
+            }
+            var orders = await _orderRepo.GetOutForDeliveryOrdersByDeliveryPersonId(userId);
+            if(orders is null)
+            {
+                return NotFound("order not found");
+            }
+
+            return Ok(orders.Select(s=> new
+            {
+                s.OrderNumber,
+                s.OrderStatus,
+                s.Total_Amount
+            }));
+        }
         [HttpPut("{ordernumber}/delivered")]
         [Authorize(Roles = "DeliveryPerson")]
         public async Task<IActionResult> MarkDelivered(string ordernumber)
@@ -167,7 +218,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("{ordernumber}/order-status")]
-        [Authorize]
+        
         public async Task<IActionResult> GetOrderStatus(string ordernumber)
         {
             
@@ -180,7 +231,7 @@ namespace Server.Api.Controllers
             {
                 a.OrderNumber,
                 a.Order_Status,
-                a.Update_By,
+                fullName = a.AppUser?.FirstName,
                 a.Updated_At
             }));
         }
