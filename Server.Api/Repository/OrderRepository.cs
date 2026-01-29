@@ -24,7 +24,9 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> AcceptOrderByDeliveryPerson(string ordernumber, string deliveryPersonId)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(s=>s.OrderNumber== ordernumber);
+        var order = await _context.Orders
+            .Include(a=>a.AppUser)
+            .FirstOrDefaultAsync(s=>s.OrderNumber== ordernumber);
         if(order is null)
         {
             throw new Exception("order not found");
@@ -60,9 +62,23 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
+
+    public async Task<List<Order>> GetAllAsync()
+    {
+        var orders = await _context.Orders.ToListAsync();
+        if (orders is null)
+        {
+            throw new Exception("no any orders");
+        }
+        return orders;
+    }
+
     public async Task<Order?> ConfirmOrderAsync(string ordernumber, string userId)
     {
-        var order = await _context.Orders.Include(o=>o.OrderItems).FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
+        var order = await _context.Orders.
+                            Include(o=>o.OrderItems)
+                            .Include(o=>o.AppUser)
+                            .FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
         if (order == null)
         {
             throw new Exception("Order not found");
@@ -107,6 +123,7 @@ public class OrderRepository : IOrderRepository
         order.OrderNumber= $"ORD-{DateTime.UtcNow.Year}-{order.Id:D6}";
         await _context.SaveChangesAsync();
         await AddStatusHistoryAysnc(order.Id, OrderStatus.Pending, CustomerId);
+        await _context.Orders.Entry(order).Reference(o=>o.AppUser).LoadAsync();
         return order;
     }
 
@@ -144,14 +161,51 @@ public class OrderRepository : IOrderRepository
             throw new KeyNotFoundException("order not found");
         }
 
-        var status = await _context.OrderStatusHistory.Where(s=>s.OrderNumber == order.OrderNumber).ToListAsync();
+        var status = await _context.OrderStatusHistory.Include(a=>a.AppUser).Where(s=>s.OrderNumber == order.OrderNumber).ToListAsync();
 
         return status;
     }
 
+    public async  Task<List<Order>> GetOutForDeliveryOrdersByDeliveryPersonId(string deliveryPersonId)
+    {
+        var order = await _context.Orders.Where(s => s.deliveryPersonId == deliveryPersonId).Where(s=>s.OrderStatus == OrderStatus.OutForDelivery).ToListAsync();
+        if (order is null)
+        {
+            throw new KeyNotFoundException("order not found");
+        }
+        
+        return order;
+    }
+
+    public async Task<List<Order>> AllDeliveredOrdersAsync()
+    {
+        var orders = await _context.Orders
+                                    .Include(x=>x.OrderItems)
+                                    .Where(s => s.OrderStatus == OrderStatus.Delivered).ToListAsync();
+        if (orders == null)
+        {
+            throw new KeyNotFoundException("order not found");
+        }
+        return orders;
+    }
+
+    public async Task<List<Order>> GetDeliveredOrdersByDeliveryPersonId(string deliveryPersonId)
+    {
+        var order = await _context.Orders.Where(s => s.deliveryPersonId == deliveryPersonId).ToListAsync();
+        if (order == null)
+        {
+            throw new KeyNotFoundException("order not found");
+        }
+        return order;
+    }
+
     public async Task<Order> MarkAsDeliveredAsync(string ordernumber, string deliveryPersonId)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(s=>s.OrderNumber== ordernumber);
+        var order = await _context.Orders
+                        .Include(a=>a.AppUser)
+                        .FirstOrDefaultAsync(s=>s.OrderNumber== ordernumber);
+                            
+                            
         if(order is null)
         {
             throw new KeyNotFoundException("order not found");

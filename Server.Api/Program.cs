@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Server.Api.ApplicationData;
+using Server.Api.Configurations;
 using Server.Api.ExceptionHandler;
 using Server.Api.Hubs;
 using Server.Api.Interfaces;
@@ -44,6 +45,21 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer= builder.Configuration["JWT:Issuer"],
         ValidAudience= builder.Configuration["JWT:Audience"],
         IssuerSigningKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!))
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/orderHub"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -98,8 +114,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
-
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+builder.Services.AddScoped<ISmsService, SmsService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -110,7 +126,7 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
