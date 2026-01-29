@@ -59,17 +59,17 @@ const About = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-800 overflow-hidden">
+            <div className="relative bg-linear-to-br from-primary via-primary/80 to-secondary overflow-hidden">
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
                     <div className="text-center">
                         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
                             About OrderTrack
                         </h1>
-                        <p className="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto leading-relaxed">
-                            We're revolutionizing the delivery industry with cutting-edge technology, 
+                        <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                            We're revolutionizing the delivery industry with cutting-edge technology,
                             real-time tracking, and unparalleled customer service.
                         </p>
                     </div>
@@ -77,31 +77,31 @@ const About = () => {
             </div>
 
             {/* Mission Section */}
-            <div className="py-20 bg-gray-50">
+            <div className="py-20 bg-background">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-text mb-4">
                             Our Mission
                         </h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            To make package delivery transparent, reliable, and effortless for businesses 
+                        <p className="text-xl text-text/70 max-w-3xl mx-auto">
+                            To make package delivery transparent, reliable, and effortless for businesses
                             and customers worldwide through innovative technology and exceptional service.
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                            <h3 className="text-2xl font-bold text-text mb-6">
                                 Transforming Delivery Experience
                             </h3>
-                            <p className="text-gray-600 mb-6 leading-relaxed">
-                                Founded in 2020, OrderTrack emerged from a simple idea: delivery tracking 
-                                should be as easy as checking your social media. We've built a platform 
+                            <p className="text-text/70 mb-6 leading-relaxed">
+                                Founded in 2020, OrderTrack emerged from a simple idea: delivery tracking
+                                should be as easy as checking your social media. We've built a platform
                                 that provides real-time visibility into every step of the delivery process.
                             </p>
-                            <p className="text-gray-600 leading-relaxed">
-                                Today, we serve thousands of businesses and millions of customers, 
-                                processing over 100,000 deliveries monthly with industry-leading 
+                            <p className="text-text/70 leading-relaxed">
+                                Today, we serve thousands of businesses and millions of customers,
+                                processing over 100,000 deliveries monthly with industry-leading
                                 accuracy and speed.
                             </p>
                         </div>
@@ -117,15 +117,15 @@ const About = () => {
             </div>
 
             {/* Stats Section */}
-            <div className="py-16 bg-white">
+            <div className="py-16 bg-card">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {stats.map((stat, index) => (
                             <div key={index} className="text-center">
-                                <div className="text-3xl md:text-4xl font-bold text-indigo-600 mb-2">
+                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
                                     {stat.number}
                                 </div>
-                                <div className="text-gray-600 font-medium">{stat.label}</div>
+                                <div className="text-text/70 font-medium">{stat.label}</div>
                             </div>
                         ))}
                     </div>
@@ -133,27 +133,27 @@ const About = () => {
             </div>
 
             {/* Values Section */}
-            <div className="py-20 bg-gray-50">
+            <div className="py-20 bg-background">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-text mb-4">
                             Our Values
                         </h2>
-                        <p className="text-xl text-gray-600">
+                        <p className="text-xl text-text/70">
                             The principles that guide everything we do
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {values.map((value, index) => (
-                            <div key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 text-center">
-                                <div className="text-indigo-600 mb-4 flex justify-center">
+                            <div key={index} className="bg-card p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border text-center">
+                                <div className="text-primary mb-4 flex justify-center">
                                     {value.icon}
                                 </div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                                <h3 className="text-xl font-semibold text-text mb-3">
                                     {value.title}
                                 </h3>
-                                <p className="text-gray-600 leading-relaxed">
+                                <p className="text-text/70 leading-relaxed">
                                     {value.description}
                                 </p>
                             </div>
@@ -163,13 +163,13 @@ const About = () => {
             </div>
 
             {/* Team Section */}
-            <div className="py-20 bg-white">
+            <div className="py-20 bg-card">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-text mb-4">
                             Meet Our Team
                         </h2>
-                        <p className="text-xl text-gray-600">
+                        <p className="text-xl text-text/70">
                             The passionate people behind OrderTrack
                         </p>
                     </div>
@@ -184,13 +184,13 @@ const About = () => {
                                         className="w-32 h-32 rounded-full mx-auto object-cover shadow-lg"
                                     />
                                 </div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                                <h3 className="text-xl font-semibold text-text mb-2">
                                     {member.name}
                                 </h3>
-                                <p className="text-indigo-600 font-medium mb-3">
+                                <p className="text-primary font-medium mb-3">
                                     {member.role}
                                 </p>
-                                <p className="text-gray-600 text-sm leading-relaxed">
+                                <p className="text-text/70 text-sm leading-relaxed">
                                     {member.bio}
                                 </p>
                             </div>
@@ -200,50 +200,50 @@ const About = () => {
             </div>
 
             {/* Awards Section */}
-            <div className="py-20 bg-gray-50">
+            <div className="py-20 bg-background">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-text mb-4">
                             Recognition & Awards
                         </h2>
-                        <p className="text-xl text-gray-600">
+                        <p className="text-xl text-text/70">
                             Industry recognition for our innovation and service
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">
-                        <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+                        <div className="bg-card p-8 rounded-xl shadow-lg text-center">
                             <div className="text-yellow-500 mb-4 flex justify-center">
                                 <Award className="h-12 w-12" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                            <h3 className="text-lg font-semibold text-text mb-2">
                                 Best Logistics Platform 2023
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-text/70">
                                 TechCrunch Startup Awards
                             </p>
                         </div>
 
-                        <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+                        <div className="bg-card p-8 rounded-xl shadow-lg text-center">
                             <div className="text-yellow-500 mb-4 flex justify-center">
                                 <Award className="h-12 w-12" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                            <h3 className="text-lg font-semibold text-text mb-2">
                                 Innovation in Delivery
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-text/70">
                                 Logistics Excellence Awards
                             </p>
                         </div>
 
-                        <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+                        <div className="bg-card p-8 rounded-xl shadow-lg text-center">
                             <div className="text-yellow-500 mb-4 flex justify-center">
                                 <Award className="h-12 w-12" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                            <h3 className="text-lg font-semibold text-text mb-2">
                                 Customer Choice Award
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-text/70">
                                 E-commerce Excellence
                             </p>
                         </div>
@@ -252,17 +252,17 @@ const About = () => {
             </div>
 
             {/* CTA Section */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 py-16">
+            <div className="bg-linear-to-r from-primary to-secondary py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                         Ready to Join Our Journey?
                     </h2>
-                    <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">
-                        Whether you're a business looking for reliable delivery solutions or 
+                    <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                        Whether you're a business looking for reliable delivery solutions or
                         a talented individual wanting to make an impact, we'd love to hear from you.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="px-8 py-4 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-300 shadow-lg">
+                        <button className="px-8 py-4 bg-card text-primary font-semibold rounded-lg hover:bg-background transition-colors duration-300 shadow-lg">
                             Contact Us
                         </button>
                         <button className="px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors duration-300 backdrop-blur-sm border border-white/20">

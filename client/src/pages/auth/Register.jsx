@@ -42,41 +42,41 @@ const Register = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors">
+        <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors">
             {/* Background Pattern */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-linear-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-linear-to-br from-secondary/20 to-primary/20 rounded-full blur-3xl"></div>
             </div>
 
             <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="flex justify-center">
                     <div className="flex items-center space-x-2">
-                        <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+                        <div className="p-3 bg-linear-to-br from-primary to-secondary rounded-xl shadow-lg">
                             <Package className="h-8 w-8 text-white" />
                         </div>
-                        <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        <span className="text-2xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
                             OrderTrack
                         </span>
                     </div>
                 </div>
-                <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 dark:text-white">
+                <h2 className="mt-6 text-center text-3xl font-bold text-text">
                     Create your account
                 </h2>
-                <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                <p className="mt-2 text-center text-sm text-text">
                     Already have an account?{' '}
-                    <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+                    <Link to="/login" className="font-medium text-primary hover:text-primary/80 transition-colors">
                         Sign in here
                     </Link>
                 </p>
             </div>
 
             <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-white/20 dark:border-gray-700 transition-colors">
+                <div className="bg-card/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-border transition-colors">
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label htmlFor="firstName" className="block text-sm font-medium text-text mb-2">
                                     First Name
                                 </label>
                                 <div className="relative">
@@ -90,13 +90,13 @@ const Register = () => {
                                         required
                                         value={formData.firstName}
                                         onChange={handleChange}
-                                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 dark:text-white"
+                                        className="block w-full pl-10 pr-3 py-3 border border-border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-card text-text"
                                         placeholder="John"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label htmlFor="lastName" className="block text-sm font-medium text-text mb-2">
                                     Last Name
                                 </label>
                                 <div className="relative">
@@ -110,7 +110,7 @@ const Register = () => {
                                         required
                                         value={formData.lastName}
                                         onChange={handleChange}
-                                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 dark:text-white"
+                                        className="block w-full pl-10 pr-3 py-3 border border-border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-card text-text"
                                         placeholder="Doe"
                                     />
                                 </div>
@@ -118,7 +118,7 @@ const Register = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label htmlFor="email" className="block text-sm font-medium text-text mb-2">
                                 Email address
                             </label>
                             <div className="relative">
@@ -133,14 +133,14 @@ const Register = () => {
                                     required
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 dark:text-white"
+                                    className="block w-full pl-10 pr-3 py-3 border border-border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-card text-text"
                                     placeholder="john@example.com"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label htmlFor="password" className="block text-sm font-medium text-text mb-2">
                                 Password
                             </label>
                             <div className="relative">
@@ -155,7 +155,7 @@ const Register = () => {
                                     required
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 dark:text-white"
+                                    className="block w-full pl-10 pr-12 py-3 border border-border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-card text-text"
                                     placeholder="Create a strong password"
                                 />
                                 <button
@@ -173,7 +173,7 @@ const Register = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="role" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                            <label htmlFor="role" className="block text-sm font-medium text-text mb-3">
                                 Account Type
                             </label>
                             <div className="space-y-3">
@@ -188,19 +188,19 @@ const Register = () => {
                                             className="sr-only"
                                         />
                                         <div className={`flex-1 flex items-center p-4 rounded-xl border-2 transition-all duration-200 ${formData.role === option.value
-                                                ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-                                                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                                            ? 'border-primary bg-primary/10'
+                                            : 'border-border hover:border-gray-300'
                                             }`}>
-                                            <div className={`flex-shrink-0 ${formData.role === option.value ? 'text-indigo-600' : 'text-gray-400'
+                                            <div className={`flex-shrink-0 ${formData.role === option.value ? 'text-primary' : 'text-gray-400'
                                                 }`}>
                                                 {option.icon}
                                             </div>
                                             <div className="ml-3">
-                                                <div className={`text-sm font-medium ${formData.role === option.value ? 'text-indigo-900 dark:text-indigo-300' : 'text-gray-900 dark:text-white'
+                                                <div className={`text-sm font-medium ${formData.role === option.value ? 'text-primary-dark' : 'text-text'
                                                     }`}>
                                                     {option.label}
                                                 </div>
-                                                <div className={`text-xs ${formData.role === option.value ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-500 dark:text-gray-400'
+                                                <div className={`text-xs ${formData.role === option.value ? 'text-primary' : 'text-text/60'
                                                     }`}>
                                                     {option.description}
                                                 </div>
@@ -217,15 +217,15 @@ const Register = () => {
                                 name="terms"
                                 type="checkbox"
                                 required
-                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
                             />
-                            <label htmlFor="terms" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                            <label htmlFor="terms" className="ml-2 block text-sm text-text">
                                 I agree to the{' '}
-                                <a href="#" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
+                                <a href="#" className="text-primary hover:text-primary/80">
                                     Terms of Service
                                 </a>{' '}
                                 and{' '}
-                                <a href="#" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
+                                <a href="#" className="text-primary hover:text-primary/80">
                                     Privacy Policy
                                 </a>
                             </label>
@@ -235,7 +235,7 @@ const Register = () => {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-linear-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? (
                                     <>
