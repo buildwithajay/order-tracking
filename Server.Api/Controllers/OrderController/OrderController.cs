@@ -45,18 +45,13 @@ namespace Server.Api.Controllers
             var userId= User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var order = await _orderRepo.CreateAsync(userId, orderRequest);
             await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
-            await _hubContext.Clients.Group("Managers").SendAsync("NewPendingOrder", new
+            await _hubContext.Clients.Group("Manager").SendAsync("NewPendingOrder", new
             {
                 order.OrderNumber,
                 order.OrderStatus
             });
-            var phone = order.AppUser?.PhoneNumber;
-            if (string.IsNullOrWhiteSpace(phone))
-            {
-                return NotFound("number not available");
-            }
-            await _smsService.SendSmsAsync(phone,
-                $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
+           
+           
             return Ok(new
             {
                 order.Id,
@@ -75,8 +70,25 @@ namespace Server.Api.Controllers
             var userid = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var order = await _orderRepo.ConfirmOrderAsync(ordernumber, userid);
             if(order is null) return NotFound("Your order not found");
-            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
-
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", new
+            {
+                orderNumber = order.OrderNumber,
+                status = order.OrderStatus,
+                updatedAt = DateTime.UtcNow,
+                fullName = order.AppUser?.FirstName
+            });
+            await _hubContext.Clients.Group("Delivery").SendAsync("NewAvailableDeliveryOrder", new
+            {
+                
+                orderNumber = order.OrderNumber,
+                status = order.OrderStatus,
+                updatedAt = DateTime.UtcNow,
+                fullName = order.AppUser?.FirstName
+            });
+            var phone = order.AppUser?.PhoneNumber;
+            if(phone is null) return BadRequest("customer phone number not found");
+            await _smsService.SendSmsAsync(phone,
+                $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
             return Ok(new
             {
                 order.Id,
@@ -114,7 +126,8 @@ namespace Server.Api.Controllers
                   s.Unit_Price  
                 }).ToList(),
                 o.Total_Amount,
-                o.Created_At
+                o.Created_At,
+             
             }));
         }
         [HttpGet("pending-orders")]
@@ -126,6 +139,7 @@ namespace Server.Api.Controllers
             {
                 return NotFound("no any pending orders");
             }
+            
             return Ok(orders.Select(o=>new
             {
                 o.OrderNumber,
@@ -162,7 +176,13 @@ namespace Server.Api.Controllers
             {
                 return NotFound("order not found");
             }
-            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", new
+            {
+                orderNumber = order.OrderNumber,
+                status = order.OrderStatus,
+                updatedAt = DateTime.UtcNow,
+                fullName = order.AppUser?.FirstName
+            });
             return Ok(new
             {
                 order.deliveryPersonId,
@@ -207,7 +227,13 @@ namespace Server.Api.Controllers
             {
                 return NotFound("order not found");
             }
-            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", order.OrderNumber, order.OrderStatus);
+            await _hubContext.Clients.Group(order.OrderNumber!).SendAsync("updateOrderStatus", new
+            {
+                orderNumber = order.OrderNumber,
+                status = order.OrderStatus,
+                updatedAt = DateTime.UtcNow,
+                fullName = order.AppUser?.FirstName
+            });
 
             return Ok(new
             {
@@ -235,6 +261,40 @@ namespace Server.Api.Controllers
                 a.Updated_At
             }));
         }
+
+        [HttpGet("delivered-orders")]
+        [Authorize(Roles = "DeliveryPerson, Manager")]
+        public async Task<IActionResult> GetDeliveredOrders()
+        {
+            var orders = await _orderRepo.AllDeliveredOrdersAsync();
+            return Ok(orders.Select(o => new
+            {
+                o.OrderNumber,
+                items = o.OrderItems?.Select(s => new
+                {
+                    s.Product?.Name,
+                    s.Quantity,
+
+                }),
+                o.Total_Amount
+
+            }));
+        }
+
+        [HttpGet("delivered-orders-by-delivery-person-id")]
+        [Authorize(Roles = "DeliveryPerson")]
+        public async Task<IActionResult> GetDeliveredOrdersByDeliveryPersonId()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var orders= await _orderRepo.GetDeliveredOrdersByDeliveryPersonId(userId);
+            return Ok(orders.Select(s => new
+                {
+                    s.OrderNumber,
+                }
+            ));
+
+        }
+        
         
 
     }

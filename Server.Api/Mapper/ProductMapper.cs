@@ -13,7 +13,8 @@ public static class ProductMapper
         {
             Id= productDto.Id,
             Name= productDto.Name,
-            Price= productDto.Price
+            Price= productDto.Price,
+            IsAvailable= productDto.IsAvailable
         };
     }
     public static Product ToProductFromCreate(this CreateProductDto createProductDto)

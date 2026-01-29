@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
+    <PackageReference Include="Twilio" Version="7.14.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,15 +27,9 @@
     <Folder Include="Entities/Products/" />
     <Folder Include="Enums/" />
     <Folder Include="ExceptionHandler/" />
-    <Folder Include="Interfaces/" />
     <Folder Include="Mapper/" />
     <Folder Include="Repository/" />
-    <Folder Include="Services/" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Client\package-lock.json" />
-    <_ContentIncludedByDefault Remove="Client\package.json" />
-  </ItemGroup>
 
 </Project>
