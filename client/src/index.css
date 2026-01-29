@@ -1,11 +1,32 @@
 @import "tailwindcss";
 
-/* Global styles */
-* {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+@theme {
+  --color-primary: #2D9CDB;
+  --color-secondary: #219653;
+  --color-background: #F0FDF4;
+  --color-card: #FFFFFF;
+  --color-text: #1C1C1C;
+  --color-border: #E5E7EB;
+
+  /* Retain standard colors if needed, but primary focus is semantic naming */
 }
 
-/* Dark mode support removed */
+/* Global styles */
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Ensuring a clean font */
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  border-color: var(--color-border);
+}
 
 @keyframes shimmer {
   0% {

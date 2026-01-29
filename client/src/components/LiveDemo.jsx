@@ -1,160 +1,217 @@
 import { useState, useEffect } from 'react';
-import { Search, Package, Truck, CheckCircle, Clock } from 'lucide-react';
+import { Package, MapPin, Truck, CheckCircle, Clock } from 'lucide-react';
 
 const LiveDemo = () => {
-    const [text, setText] = useState('');
-    const [stage, setStage] = useState('typing'); // typing, searching, result, reset
-    const [progress, setProgress] = useState(0);
+  const [step, setStep] = useState(0);
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [showTimeline, setShowTimeline] = useState(false);
+  
+  const fullTrackingNumber = 'ORD-2025-001008';
 
-    const targetText = 'ORD-2026-001008';
+  // Animation sequence
+  useEffect(() => {
+    const sequence = async () => {
+      // Step 1: Type tracking number
+      if (step === 0) {
+        for (let i = 0; i <= fullTrackingNumber.length; i++) {
+          await new Promise(resolve => setTimeout(resolve, 150));
+          setTrackingNumber(fullTrackingNumber.slice(0, i));
+        }
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setStep(1);
+      }
+      
+      // Step 2: Click track button
+      if (step === 1) {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setStep(2);
+      }
+      
+      // Step 3: Show timeline
+      if (step === 2) {
+        await new Promise(resolve => setTimeout(resolve, 400));
+        setShowTimeline(true);
+      }
+    };
 
-    useEffect(() => {
-        let timeout;
+    sequence();
+  }, [step]);
 
-        const animate = async () => {
-            if (stage === 'typing') {
-                if (text.length < targetText.length) {
-                    timeout = setTimeout(() => {
-                        setText(targetText.slice(0, text.length + 1));
-                    }, 100);
-                } else {
-                    timeout = setTimeout(() => setStage('searching'), 500);
-                }
-            } else if (stage === 'searching') {
-                timeout = setTimeout(() => {
-                    setStage('result');
-                    // Animate progress bar
-                    let p = 0;
-                    const interval = setInterval(() => {
-                        p += 2;
-                        if (p >= 100) {
-                            clearInterval(interval);
-                            setTimeout(() => setStage('reset'), 3000);
-                        }
-                        setProgress(p);
-                    }, 20);
-                }, 800);
-            } else if (stage === 'reset') {
-                timeout = setTimeout(() => {
-                    setText('');
-                    setStage('typing');
-                    setProgress(0);
-                }, 1000);
-            }
-        };
+  // Timeline data
+  const timelineSteps = [
+    {
+      icon: <CheckCircle className="w-5 h-5" />,
+      title: 'Order Placed',
+      time: '2 days ago',
+      location: 'New York, NY',
+      status: 'completed'
+    },
+    {
+      icon: <Package className="w-5 h-5" />,
+      title: 'Package Processed',
+      time: '1 day ago',
+      location: 'Distribution Center',
+      status: 'completed'
+    },
+    {
+      icon: <Truck className="w-5 h-5" />,
+      title: 'Out for Delivery',
+      time: '2 hours ago',
+      location: 'Local Facility',
+      status: 'active'
+    },
+    {
+      icon: <MapPin className="w-5 h-5" />,
+      title: 'Delivered',
+      time: 'Estimated in 3 hours',
+      location: 'Your Address',
+      status: 'pending'
+    }
+  ];
 
-        animate();
+  return (
+    <div className="w-full h-full bg-gradient-to-b from-gray-50 to-white">
+      
+      {/* Header - Mobile Optimized */}
+      <div className="px-5 pt-4 pb-3">
+        <h2 className="text-xl font-bold text-gray-900 mb-1">Track Package</h2>
+        <p className="text-xs text-gray-600">Enter your tracking number</p>
+      </div>
 
-        return () => clearTimeout(timeout);
-    }, [text, stage]);
-
-    return (
-        <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transition-colors">
-            {/* Mock Browser Header */}
-            <div className="bg-gray-100 dark:bg-gray-900 px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center space-x-2">
-                <div className="flex space-x-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                </div>
-                <div className="flex-1 text-center text-xs text-gray-500 dark:text-gray-400 font-medium">OrderTrack Live Demo</div>
-            </div>
-
-            <div className="p-6 md:p-8">
-                <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Track Your Order</h3>
-                    <p className="text-gray-500 dark:text-gray-400">Real-time status updates at your fingertips</p>
-                </div>
-
-                {/* Input Area */}
-                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8">
-                    <div className="relative flex-1">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Search className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input
-                            type="text"
-                            value={text}
-                            readOnly
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                            placeholder="Order Number"
-                        />
-                        {stage === 'typing' && (
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-500 animate-blink"></span>
-                        )}
-                    </div>
-                    <button
-                        className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${stage === 'searching'
-                                ? 'bg-blue-700 scale-95'
-                                : 'bg-blue-600 hover:bg-blue-700'
-                            } text-white shadow-lg shadow-blue-500/30 w-full sm:w-auto`}
-                    >
-                        {stage === 'searching' ? 'Tracking...' : 'Track Order'}
-                    </button>
-                </div>
-
-                {/* Result Area */}
-                <div className={`transition-all duration-500 ease-in-out overflow-hidden ${stage === 'result' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}>
-                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 border border-gray-100 dark:border-gray-700">
-                        <div className="flex items-center justify-between mb-6">
-                            <div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">Order #ORD-2026-001008</div>
-                                <div className="font-semibold text-lg text-gray-900 dark:text-white">Arriving Today</div>
-                            </div>
-                            <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-                                <Truck className="w-4 h-4 mr-1" />
-                                Out for Delivery
-                            </span>
-                        </div>
-
-                        {/* Interactive Timeline */}
-                        <div className="relative">
-                            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-600"></div>
-
-                            {/* Animated Line */}
-                            <div
-                                className="absolute left-6 top-0 w-0.5 bg-green-500 transition-all duration-[3000ms] ease-linear"
-                                style={{ height: `${progress}%`, maxHeight: '100%' }}
-                            ></div>
-
-                            <div className="space-y-6 relative z-10">
-                                {[
-                                    { icon: Clock, label: 'Order Placed', time: '10:00 AM' },
-                                    { icon: CheckCircle, label: 'Confirmed', time: '10:05 AM' },
-                                    { icon: Package, label: 'Packed', time: '11:30 AM' },
-                                    { icon: Truck, label: 'Out for Delivery', time: '02:15 PM' }
-                                ].map((item, idx) => (
-                                    <div key={idx} className="flex items-center">
-                                        <div className={`w-12 h-12 rounded-full border-4 flex items-center justify-center transition-colors duration-300 ${progress >= (idx * 33) ? 'bg-green-100 dark:bg-green-900/50 border-white dark:border-gray-800 text-green-600 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-800 border-white dark:border-gray-800 text-gray-400 dark:text-gray-500'
-                                            }`}>
-                                            <item.icon className="w-5 h-5" />
-                                        </div>
-                                        <div className="ml-4 flex-1">
-                                            <div className={`font-medium transition-colors duration-300 ${progress >= (idx * 33) ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
-                                                {item.label}
-                                            </div>
-                                            <div className="text-xs text-gray-500 dark:text-gray-400">{item.time}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <style>{`
-                @keyframes blink {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0; }
-                }
-                .animate-blink {
-                    animation: blink 1s step-end infinite;
-                }
-            `}</style>
+      {/* Search Input Section */}
+      <div className={`px-5 transition-all duration-500 ${showTimeline ? 'opacity-50 scale-95' : 'opacity-100'}`}>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 mb-4">
+          <div className="flex items-center gap-2.5">
+            <Package className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <input
+              type="text"
+              value={trackingNumber}
+              readOnly
+              placeholder="Enter tracking number"
+              className="flex-1 outline-none text-gray-900 font-medium text-sm"
+            />
+          </div>
         </div>
-    );
+
+        <button
+          className={`w-full py-3.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 ${
+            step >= 1 
+              ? 'bg-gradient-to-r from-primary to-secondary shadow-md scale-[0.98]' 
+              : 'bg-gradient-to-r from-primary to-secondary shadow-sm'
+          }`}
+        >
+          {step >= 1 ? 'Tracking...' : 'Track Package'}
+        </button>
+      </div>
+
+      {/* Timeline Section */}
+      {showTimeline && (
+        <div className="px-5 mt-6 animate-fadeIn pb-6">
+          {/* Delivery Status Card */}
+          <div className="bg-gradient-to-r from-primary to-secondary rounded-xl p-4 mb-5 text-white shadow-md">
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <p className="text-xs opacity-90 mb-0.5">Status</p>
+                <h3 className="text-lg font-bold">Out for Delivery</h3>
+              </div>
+              <Truck className="w-7 h-7 animate-bounce" />
+            </div>
+            <p className="text-xs opacity-90">Estimated: Today, 5:00 PM</p>
+          </div>
+
+          {/* Timeline */}
+          <div className="space-y-0.5">
+            {timelineSteps.map((item, index) => (
+              <div
+                key={index}
+                className={`relative animate-slideIn`}
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div className="flex gap-3">
+                  {/* Timeline Line */}
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                        item.status === 'completed'
+                          ? 'bg-green-500 text-white'
+                          : item.status === 'active'
+                          ? 'bg-primary text-white ring-4 ring-primary/20'
+                          : 'bg-gray-200 text-gray-400'
+                      }`}
+                    >
+                      {item.icon}
+                    </div>
+                    {index < timelineSteps.length - 1 && (
+                      <div
+                        className={`w-0.5 h-14 ${
+                          item.status === 'completed' ? 'bg-green-500' : 'bg-gray-200'
+                        }`}
+                      />
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 pb-5">
+                    <h4 className={`font-semibold text-sm mb-0.5 ${
+                      item.status === 'active' ? 'text-primary' : 'text-gray-900'
+                    }`}>
+                      {item.title}
+                    </h4>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-600 mb-1">
+                      <Clock className="w-3 h-3" />
+                      <span>{item.time}</span>
+                    </div>
+                    <p className="text-xs text-gray-500">{item.location}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Action */}
+          <div className="mt-5 pt-5 border-t border-gray-200">
+            <button className="w-full py-3 rounded-xl border-2 border-primary text-primary text-sm font-semibold hover:bg-primary/5 transition-colors active:scale-[0.98]">
+              View Full Details
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Add custom animations */}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .animate-slideIn {
+          animation: slideIn 0.5s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
+    </div>
+  );
 };
 
 export default LiveDemo;
