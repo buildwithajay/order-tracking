@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5132/api';
+const BASE_URL = 'https://order-tracking-rg-hpadf2b5dugjf2hm.centralindia-01.azurewebsites.net/api';
 
 export const api = axios.create({
     baseURL: BASE_URL,
