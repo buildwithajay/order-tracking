@@ -1,7 +1,10 @@
 import * as signalR from "@microsoft/signalr";
 
 
-const API_BASE = import.meta.env.VITE_API_BASE;
+const API_BASE =
+  import.meta.env.VITE_API_BASE ||
+  "https://order-tracking-rg-hpadf2b5dugjf2hm.centralindia-01.azurewebsites.net";
+
 let connection = null;
 
 export const getConnection = () => connection;

@@ -1,16 +1,17 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://order-tracking-rg-hpadf2b5dugjf2hm.centralindia-01.azurewebsites.net/api';
+
+const API_BASE = "https://order-tracking-rg-hpadf2b5dugjf2hm.centralindia-01.azurewebsites.net/api";
 
 export const api = axios.create({
-    baseURL: BASE_URL,
+    baseURL: API_BASE,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
 export const apiPrivate = axios.create({
-    baseURL: BASE_URL,
+    baseURL: API_BASE,
     headers: {
         'Content-Type': 'application/json',
     },
