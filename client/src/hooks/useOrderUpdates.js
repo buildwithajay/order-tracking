@@ -23,7 +23,7 @@ export const useOrderUpdates = () => {
 
     const confirmOrder = async (orderNumber) => {
         try {
-            await apiPrivate.put(`/order/${orderNumber}/confirm`);
+            await apiPrivate.put(`/order/${orderNumber}/confirm`,{});
             toast.success('Order confirmed successfully!');
             return true;
         } catch (error) {
