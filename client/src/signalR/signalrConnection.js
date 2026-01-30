@@ -8,7 +8,7 @@ export const startConnection = async (token) => {
   if (connection) return connection;
 
   connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:5132/orderHub", {
+    .withUrl("https://jolly-water-023db5f00.6.azurestaticapps.net/orderHub", {
       accessTokenFactory: () => token,
     })
     .withAutomaticReconnect()
