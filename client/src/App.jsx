@@ -34,6 +34,7 @@ import MyDeliveries from './pages/delivery/MyDeliveries';
 import DeliveryDashboard from './pages/delivery/DeliveryDashboard';
 
 function App() {
+  console.log("Google Client ID:", import.meta.env.VITE_GOOGLE_CLIENT_ID);
   return (
     <MainLayout>
       <Routes>
