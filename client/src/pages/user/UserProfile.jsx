@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
 import { apiPrivate } from '../../api/axios';
 import { toast } from 'react-toastify';
-import { User, Mail, Shield } from 'lucide-react';
-import Card from '../../components/Card';
+import {
+  User,
+  Mail,
+  Shield,
+  Phone,
+  MapPin,
+  Building2,
+  Landmark,
+  Hash
+} from 'lucide-react';
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -10,6 +18,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     fetchUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchUserProfile = async () => {
@@ -22,6 +31,23 @@ const UserProfile = () => {
       setLoading(false);
     }
   };
+
+  const displayValue = (value) => {
+    if (value === null || value === undefined || value === '') return '—';
+    return value;
+  };
+
+  // Supports BOTH:
+  // 1) API returns: role: "User"
+  // 2) API returns: roles: ["User", ...]
+  const getRolesArray = (u) => {
+    if (!u) return [];
+    if (Array.isArray(u.roles) && u.roles.length) return u.roles;
+    if (typeof u.role === 'string' && u.role.trim()) return [u.role];
+    return [];
+  };
+
+  const roles = user ? getRolesArray(user) : [];
 
   if (loading) {
     return (
@@ -63,41 +89,52 @@ const UserProfile = () => {
               </div>
               <div className="absolute -bottom-1 -right-1 h-5 w-5 bg-secondary rounded-full border-3 border-card shadow-sm"></div>
             </div>
-            <div>
+
+            <div className="flex-1">
               <h2 className="text-2xl font-bold text-text">
-                {user.firstName} {user.lastName}
+                {displayValue(user.firstName)} {displayValue(user.lastName)}
               </h2>
+
               <p className="text-text/70 text-sm mt-1 flex items-center">
                 <Mail className="h-3.5 w-3.5 mr-1.5" />
-                {user.email}
+                {displayValue(user.email)}
               </p>
-              <div className="flex items-center mt-3 space-x-2">
-                {user.roles.map((role, index) => (
-                  <span
-                    key={index}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-background text-text/80 border border-border"
-                  >
-                    <Shield className="h-3 w-3 mr-1" />
-                    {role}
-                  </span>
-                ))}
+
+              {/* Role badges */}
+              <div className="flex flex-wrap items-center mt-3 gap-2">
+                {roles.length ? (
+                  roles.map((role, index) => (
+                    <span
+                      key={`${role}-${index}`}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-background text-text/80 border border-border"
+                    >
+                      <Shield className="h-3 w-3 mr-1" />
+                      {role}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-xs text-text/60">No role assigned</span>
+                )}
               </div>
             </div>
           </div>
 
           {/* Profile Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div className="p-4 bg-background rounded-xl border border-border">
-              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
-                User ID
-              </label>
-              <div className="flex items-center space-x-2">
-                <User className="h-4 w-4 text-text/70" />
-                <span className="text-sm text-text font-mono font-medium">
-                  {user.id}
-                </span>
+            {/* User ID (optional if your API returns id) */}
+            {'id' in user && (
+              <div className="p-4 bg-background rounded-xl border border-border">
+                <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                  User ID
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Hash className="h-4 w-4 text-text/70" />
+                  <span className="text-sm text-text font-mono font-medium">
+                    {displayValue(user.id)}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="p-4 bg-background rounded-xl border border-border">
               <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
@@ -106,7 +143,7 @@ const UserProfile = () => {
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-text/70" />
                 <span className="text-sm text-text font-medium">
-                  {user.email}
+                  {displayValue(user.email)}
                 </span>
               </div>
             </div>
@@ -115,55 +152,141 @@ const UserProfile = () => {
               <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
                 First Name
               </label>
-              <span className="text-sm text-text font-medium">
-                {user.firstName}
-              </span>
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.firstName)}
+                </span>
+              </div>
             </div>
 
             <div className="p-4 bg-background rounded-xl border border-border">
               <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
                 Last Name
               </label>
-              <span className="text-sm text-text font-medium">
-                {user.lastName}
-              </span>
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.lastName)}
+                </span>
+              </div>
+            </div>
+
+            {/* Role (string) */}
+            <div className="p-4 bg-background rounded-xl border border-border">
+              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                Role
+              </label>
+              <div className="flex items-center space-x-2">
+                <Shield className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.role || roles[0])}
+                </span>
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="p-4 bg-background rounded-xl border border-border">
+              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                Phone Number
+              </label>
+              <div className="flex items-center space-x-2">
+                <Phone className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.phoneNumber)}
+                </span>
+              </div>
+            </div>
+
+            {/* Address */}
+            <div className="p-4 bg-background rounded-xl border border-border md:col-span-2">
+              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                Address
+              </label>
+              <div className="flex items-start space-x-2">
+                <MapPin className="h-4 w-4 text-text/70 mt-0.5" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.address)}
+                </span>
+              </div>
+            </div>
+
+            {/* City */}
+            <div className="p-4 bg-background rounded-xl border border-border">
+              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                City
+              </label>
+              <div className="flex items-center space-x-2">
+                <Building2 className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.city)}
+                </span>
+              </div>
+            </div>
+
+            {/* State */}
+            <div className="p-4 bg-background rounded-xl border border-border">
+              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                State
+              </label>
+              <div className="flex items-center space-x-2">
+                <Landmark className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.state)}
+                </span>
+              </div>
+            </div>
+
+            {/* Zip */}
+            <div className="p-4 bg-background rounded-xl border border-border">
+              <label className="block text-xs font-semibold text-text/60 uppercase tracking-wide mb-2">
+                Zip Code
+              </label>
+              <div className="flex items-center space-x-2">
+                <MapPin className="h-4 w-4 text-text/70" />
+                <span className="text-sm text-text font-medium">
+                  {displayValue(user.zipCode)}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Roles Section */}
-          <div className="mb-8 pb-8 border-b border-border">
-            <h3 className="text-lg font-semibold text-text mb-4">
-              Account Roles
-            </h3>
-            <div className="space-y-3">
-              {user.roles.map((role, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 bg-background rounded-xl border border-border hover:border-text/20 transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shadow-sm">
-                      <Shield className="h-5 w-5 text-white" />
+          {/* Roles Section (optional - keep if you still want it) */}
+          {roles.length > 0 && (
+            <div className="mb-8 pb-8 border-b border-border">
+              <h3 className="text-lg font-semibold text-text mb-4">
+                Account Roles
+              </h3>
+              <div className="space-y-3">
+                {roles.map((role, index) => (
+                  <div
+                    key={`${role}-${index}`}
+                    className="flex items-center justify-between p-4 bg-background rounded-xl border border-border hover:border-text/20 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shadow-sm">
+                        <Shield className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <span className="font-semibold text-text block">
+                          {role}
+                        </span>
+                        <span className="text-xs text-text/60">
+                          Active permission
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-semibold text-text block">
-                        {role}
-                      </span>
-                      <span className="text-xs text-text/60">
-                        Active permission
+                    <div className="flex items-center space-x-2">
+                      <div className="h-2 w-2 bg-secondary rounded-full"></div>
+                      <span className="text-sm font-medium text-secondary">
+                        Active
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 bg-secondary rounded-full"></div>
-                    <span className="text-sm font-medium text-secondary">
-                      Active
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Account Actions */}
           <div>
@@ -172,11 +295,12 @@ const UserProfile = () => {
             </h3>
             <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => toast.info('Profile editing not implemented yet')}
+                onClick={() => (window.location.href = '/profile/edit')}
                 className="flex-1 sm:flex-none px-6 py-3 bg-text text-background rounded-xl hover:bg-black font-semibold shadow-sm hover:shadow-md transition-all"
               >
                 Edit Profile
               </button>
+
               <button
                 onClick={() => toast.info('Password change not implemented yet')}
                 className="flex-1 sm:flex-none px-6 py-3 bg-card text-text rounded-xl hover:bg-background font-semibold border border-border hover:border-text/20 transition-all"
@@ -186,7 +310,6 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

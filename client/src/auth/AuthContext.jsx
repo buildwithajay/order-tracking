@@ -48,6 +48,20 @@ export const AuthProvider = ({ children }) => {
         return response.data;
     };
 
+    const loginWithToken = (token) => {
+        localStorage.setItem('token', token);
+        try {
+            const decoded = jwtDecode(token);
+            setUser({
+                ...decoded,
+                roles: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || []
+            });
+        } catch (error) {
+            console.error('Failed to decode token', error);
+        }
+    };
+
+
     const register = async (userData) => {
         return await api.post('/account/register', userData);
     };
@@ -58,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, loginWithToken, register, logout, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );

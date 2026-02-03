@@ -1,10 +1,9 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Server.Api.DTOS;
-using Server.Api.DTOS.Orders;
 using Server.Api.Entities.Order;
 using Server.Api.Hubs;
 using Server.Api.Interfaces;
@@ -156,10 +155,21 @@ namespace Server.Api.Controllers
             {
                 return NotFound("order not found");
             }
+          
             return Ok(orders.Select(s=>new
             {
                 s.OrderNumber,
-                s.OrderStatus
+                s.OrderStatus,
+                customerName= $"{s.AppUser!.FirstName} {s.AppUser!.LastName}",
+                customerPhone = s.AppUser!.PhoneNumber,
+                DeliveryAddress = $"{s.AppUser.Address}, {s.AppUser.City}, {s.AppUser.ZipCode}",
+                items = s.OrderItems!.Select(o=>new
+                {
+                    o.Product!.Name,
+                    o.Quantity   
+                }),
+                s.Total_Amount
+                
             }));
         }
         [HttpPut("{ordernumber}/accept")]
@@ -183,11 +193,14 @@ namespace Server.Api.Controllers
                 updatedAt = DateTime.UtcNow,
                 fullName = order.AppUser?.FirstName
             });
+            
+            await _smsService.SendSmsAsync(order.AppUser!.PhoneNumber!,  $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
             return Ok(new
             {
                 order.deliveryPersonId,
                 order.OrderNumber,
-                order.OrderStatus
+                order.OrderStatus,
+                order.AppUser!.Address
             });
         }
 
@@ -206,11 +219,20 @@ namespace Server.Api.Controllers
                 return NotFound("order not found");
             }
 
-            return Ok(orders.Select(s=> new
+           return Ok(orders.Select(s=>new
             {
                 s.OrderNumber,
                 s.OrderStatus,
+                customerName= $"{s.AppUser!.FirstName} {s.AppUser!.LastName}",
+                customerPhone = s.AppUser!.PhoneNumber,
+                DeliveryAddress = $"{s.AppUser.Address}, {s.AppUser.City}, {s.AppUser.ZipCode}",
+                items = s.OrderItems!.Select(o=>new
+                {
+                    o.Product!.Name,
+                    o.Quantity   
+                }),
                 s.Total_Amount
+                
             }));
         }
         [HttpPut("{ordernumber}/delivered")]

@@ -53,6 +53,9 @@ public class OrderRepository : IOrderRepository
     public async Task<List<Order>> AvailableOrderForDelivery()
     {
         var order = await _context.Orders
+                            .Include(a=>a.OrderItems)!
+                            .ThenInclude(p=>p.Product)
+                            .Include(a=>a.AppUser)
                             .Where(o=>o.OrderStatus==OrderStatus.Confirmed)
                             .ToListAsync();
         if(order is null)
@@ -75,9 +78,11 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order?> ConfirmOrderAsync(string ordernumber, string userId)
     {
-        var order = await _context.Orders.
-                            Include(o=>o.OrderItems)
+        var order = await _context.Orders
+                             .Include(o=>o.OrderItems)!
+                            .ThenInclude(o=>o.Product)
                             .Include(o=>o.AppUser)
+                            
                             .FirstOrDefaultAsync(s=>s.OrderNumber==ordernumber);
         if (order == null)
         {
@@ -168,7 +173,13 @@ public class OrderRepository : IOrderRepository
 
     public async  Task<List<Order>> GetOutForDeliveryOrdersByDeliveryPersonId(string deliveryPersonId)
     {
-        var order = await _context.Orders.Where(s => s.deliveryPersonId == deliveryPersonId).Where(s=>s.OrderStatus == OrderStatus.OutForDelivery).ToListAsync();
+        var order = await _context.Orders
+                        .Include(o=>o.OrderItems)!
+                        .ThenInclude(p=>p.Product)
+                        .Include(a=>a.AppUser)
+                        .Where(s => s.deliveryPersonId == deliveryPersonId)
+                        .Where(s=>s.OrderStatus == OrderStatus.OutForDelivery)
+                        .ToListAsync();
         if (order is null)
         {
             throw new KeyNotFoundException("order not found");

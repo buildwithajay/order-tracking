@@ -3,13 +3,16 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { toast } from 'react-toastify';
 import { LogIn, Package, Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
+
+import { apiPrivate } from '../../api/axios';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const { login } = useAuth();
+    const { login, loginWithToken } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -25,6 +28,26 @@ const Login = () => {
             setIsLoading(false);
         }
     };
+    const handleGoogleLogin = async (credentialResponse) => {
+    try {
+        setIsLoading(true);
+
+        const res = await apiPrivate.post('/account/google-login', {
+            tokenId: credentialResponse.credential
+        });
+
+        // Update auth state via context so app re-renders with new user
+        loginWithToken(res.data.token);
+
+        toast.success("Logged in with Google 🚀");
+        navigate('/');
+    } catch (err) {
+        toast.error("Google login failed");
+    } finally {
+        setIsLoading(false);
+    }
+};
+
 
     return (
         <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors">
@@ -153,6 +176,24 @@ const Login = () => {
                                 )}
                             </button>
                         </div>
+                            <div className="relative mt-6">
+                              <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-border"></div>
+                                    </div>
+                                    <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-card text-text">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 flex justify-center">
+                        <GoogleLogin
+                            onSuccess={handleGoogleLogin}
+                            onError={() => toast.error("Google login failed")}
+                            width="320"
+                            theme="outline"
+                            shape="pill"
+                        />
+                    </div>
 
                         {/* Demo Accounts */}
                       

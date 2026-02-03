@@ -267,7 +267,7 @@ const DeliveryDashboard = () => {
                                                     </div>
                                                     <div>
                                                         <p className="text-sm text-text/70">Items: {order.items?.map(item => `${item.name} (${item.quantity})`).join(', ')}</p>
-                                                        <p className="text-sm text-text/70">Amount: ${order.totalAmount}</p>
+                                                        <p className="text-sm text-text/70">Amount: ${order.total_Amount}</p>
                                                         <p className="flex items-center text-sm text-text/70">
                                                             <Navigation className="mr-1 h-4 w-4" />
                                                             Distance: {order.estimatedDistance}
@@ -323,7 +323,7 @@ const DeliveryDashboard = () => {
                                                     </div>
                                                     <div>
                                                         <p className="text-sm text-text/70">Items: {order.items?.map(item => `${item.name} (${item.quantity})`).join(', ')}</p>
-                                                        <p className="text-sm text-text/70">Amount: ${order.totalAmount}</p>
+                                                        <p className="text-sm text-text/70">Amount: ${order.total_Amount}</p>
                                                         {order.acceptedAt && (
                                                             <p className="text-sm text-text/70">
                                                                 Accepted: {new Date(order.acceptedAt).toLocaleString()}

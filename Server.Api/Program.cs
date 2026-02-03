@@ -61,6 +61,10 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         }
     };
+}).AddGoogle(options =>
+{
+   options.ClientId = builder.Configuration["GoogleAuth:ClientId"]!;
+    options.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"]!;
 });
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -71,10 +75,14 @@ builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://jolly-water-023db5f00.6.azurestaticapps.net")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+       policy
+    .WithOrigins(
+        "https://jolly-water-023db5f00.6.azurestaticapps.net"
+    )
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .SetIsOriginAllowedToAllowWildcardSubdomains();
     })
 );
 builder.Services.AddSwaggerGen(options =>

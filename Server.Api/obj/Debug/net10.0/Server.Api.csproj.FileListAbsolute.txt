@@ -218,3 +218,8 @@
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.pdb
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/Server.Api.genruntimeconfig.cache
 /Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/obj/Debug/net10.0/ref/Server.Api.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Google.Apis.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Google.Apis.Auth.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/Google.Apis.Core.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/System.Management.dll
+/Users/ajaypaudel/Desktop/ASP .NET/RealTime-OrderTrackingSystem/Server.Api/bin/Debug/net10.0/runtimes/win/lib/net7.0/System.Management.dll

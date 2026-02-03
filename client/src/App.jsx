@@ -15,6 +15,7 @@ import Contact from './pages/Contact';
 
 // User
 import UserProfile from './pages/user/UserProfile';
+import UpdateUserProfile from './pages/user/UpdateUserProfile';
 
 // Customer
 import CreateOrder from './pages/customer/CreateOrder';
@@ -47,8 +48,8 @@ function App() {
         {/* Protected User Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/profile/edit" element={<UpdateUserProfile />} />
         </Route>
-
         {/* Customer Routes */}
         <Route element={<ProtectedRoute allowedRoles={['User']} />}>
           <Route path="/create-order" element={<CreateOrder />} />
