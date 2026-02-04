@@ -86,8 +86,16 @@ namespace Server.Api.Controllers
             });
             var phone = order.AppUser?.PhoneNumber;
             if(phone is null) return BadRequest("customer phone number not found");
-            await _smsService.SendSmsAsync(phone,
-                $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
+            try
+            {
+                await _smsService.SendSmsAsync(phone,
+                    $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
+            }
+            catch
+            {
+                // Swallow SMS errors so that order confirmation still succeeds in production
+                // (logging can be added here if needed)
+            }
             return Ok(new
             {
                 order.Id,
@@ -194,7 +202,14 @@ namespace Server.Api.Controllers
                 fullName = order.AppUser?.FirstName
             });
             
-            await _smsService.SendSmsAsync(order.AppUser!.PhoneNumber!,  $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
+            try
+            {
+                await _smsService.SendSmsAsync(order.AppUser!.PhoneNumber!,  $"Your order #{order.OrderNumber} is now {order.OrderStatus}");
+            }
+            catch
+            {
+                // Ignore SMS failures so the API still reports success when the order is accepted
+            }
             return Ok(new
             {
                 order.deliveryPersonId,
