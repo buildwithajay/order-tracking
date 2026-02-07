@@ -25,6 +25,7 @@
     <Folder Include="Controllers/ProductController/" />
     <Folder Include="DTOS/ProductDtos/" />
     <Folder Include="DTOS/UserDTOs/" />
+    <Folder Include="Entities/Payment/" />
     <Folder Include="Entities/Products/" />
     <Folder Include="Enums/" />
     <Folder Include="ExceptionHandler/" />

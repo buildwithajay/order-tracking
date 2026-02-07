@@ -126,13 +126,11 @@ builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twi
 builder.Services.AddScoped<ISmsService, SmsService>();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
   
     app.UseSwagger();
     app.UseSwaggerUI();
 
-}
+
 
 app.UseRouting();
 app.UseCors("AllowFrontend");
